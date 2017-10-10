@@ -1,0 +1,123 @@
+<style type="text/css">
+    .map_canvas label {
+        width: auto;
+        display: inline;
+    }
+
+    .olTileImage {
+        max-width: none !important;
+    }
+
+    .layersDiv label {
+        color: white;
+    }
+</style>
+<div class="row">
+    <!-- Success and Error Messages for the user -->
+    <div class="col-md-12" style="height:50px">
+        <!-- Success alert box -->
+        <div id="success" class="alert alert-success" style="display:none;">
+            <a class="close">×</a><strong>Well done!</strong> Your answer has been saved
+        </div>
+        <!-- Task completed alert box -->
+        <div id="taskcompleted" class="alert alert-info" style="display:none;">
+            <strong>The task has been completed!</strong> Thanks a lot!
+        </div>
+        <!-- Task loading alert box -->
+        <div id="loadingTask" class="alert alert-info">
+            <strong>Loading task...</strong>
+        </div>
+        <!-- Task completed alert box -->
+        <div id="finish" class="alert alert-success" style="display:none;">
+            <strong>Congratulations!</strong> You have participated in all available tasks!
+            <br/>
+            <div class="alert-actions">
+                <a class="btn small" href="/">Go back</a>
+                <a class="btn small" href="/app">or, Check other projects</a>
+            </div>
+        </div>
+        <!-- Error alert box -->
+        <div id="error" class="alert alert-danger" style="display:none;">
+            <a class="close">×</a>
+            <strong>Error!</strong> Something went wrong, please contact the site administrators
+        </div>
+        <!-- Old Browser alert box -->
+        <div id="oldBrowser" class="alert alert-info" style="display:none;">
+            <a class="close">×</a>
+            <p><strong>Sorry!</strong> Your web browser does not support the application.</p>
+            <div class="alert-actions">
+                <a class="btn small" href="/app">Please, try with another project</a>
+            </div>
+        </div>
+    </div>
+    <!-- End of span8 col-md-offset-2-->
+</div>
+<!-- End of Row-->
+
+<div class="row">
+    <div class="skeleton col-md-12">
+        <div id="question">
+            <p id="source"></p>
+            <h1 id="target"></h1>
+            <button id="same" value='Yes' class="btn btn-default btn-answer">Same rack</button>
+            <button id="notSame" value='No' class="btn btn-default btn-answer">Not the same Rack</button>
+            <button id="dunno" value='Maybe' class="btn btn-default btn-answer">I don't know</button>
+
+            <p>Task: <span id="task-id" class="label label-warning">#</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="row skeleton">
+    <div id="disqus_thread" class="col-md-12"></div>
+</div>
+
+<!-- PyBossa interface -->
+<script>
+    pybossa.taskLoaded(function(task, deferred) {
+        console.log(task)
+        console.log(deferred)
+        if (!$.isEmptyObject(task)) {
+            $("#source").text(task.info.url);
+            $("#loadingTask").hide();
+            deferred.resolve(task);
+        } // End if task empty
+        else {
+            deferred.resolve(task);
+        }
+    });
+
+    pybossa.presentTask(function(task, deferred) {
+        if (!$.isEmptyObject(task)) {
+            if (task.state == 'completed') {
+                $('#controls').hide();
+                $('#answer').hide();
+                $('#disqus_thread').hide();
+                $('#taskcompleted').show();
+            }
+
+            $("#task-id").text(task.id);
+            $("#loadingTask").hide();
+
+            $('.btn-answer').off('click').on('click', function(evt) {
+                console.log(evt)
+                var answer = $(evt.target).attr("value");
+                if (typeof answer != 'undefined') {
+                    console.log(answer);
+                    pybossa.saveTask(task.id, answer).done(function() {
+                        deferred.resolve();
+                    });
+                }
+                else {
+                    $("#error").show();
+                }
+            });
+
+        } else {
+            $(".skeleton").hide();
+            $("#finish").fadeIn();
+        }
+    });
+
+    pybossa.run('bike-rack-linker');
+</script>
