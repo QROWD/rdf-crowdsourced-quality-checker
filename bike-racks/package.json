@@ -1,0 +1,14 @@
+{
+  "name": "bike-racks",
+  "version": "0.0.0",
+  "dependencies": {},
+  "browserify": {
+    "transform": [
+      "debowerify"
+    ]
+  },
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "debowerify": "^1.5.0"
+  }
+}

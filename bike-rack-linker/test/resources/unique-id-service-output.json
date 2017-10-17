@@ -1,0 +1,15 @@
+{
+  "sparqlEndpoint": "anEndpoint",
+  "graph": "aGraph",
+  "login": "Really?",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cologne_montage.png/540px-Cologne_montage.png",
+  "canidates": [{
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Leipzig_Fockeberg_Zentrum.jpg/560px-Leipzig_Fockeberg_Zentrum.jpg",
+      "confidence": 0.79
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/V%C3%B6lkerschlachtdenkmal_Nacht.jpg/278px-V%C3%B6lkerschlachtdenkmal_Nacht.jpg",
+      "confidence": 0.79
+    }
+  ]
+}
