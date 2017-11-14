@@ -68,19 +68,29 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
       val info = Json.parse(getClass.getResourceAsStream("/unique-id-service-output.json"))
       val request = FakeRequest(POST, "/")
         .withJsonBody(info)
-      
+
       val home = route(app, request).get
 
       val task: Task = Task(5, info)
 
       contentAsJson(home) mustEqual Json.toJson(task)
       status(home) mustBe OK
-// {
-//   "flash": "Tasks imported",
-//   "next": "/project/<short_name>/tasks/",
-//   "status": "success"
-// }
+      // {
+      //   "flash": "Tasks imported",
+      //   "next": "/project/<short_name>/tasks/",
+      //   "status": "success"
+      // }
 
     }
   }
+
+  "HomeController POST" should {
+
+    "query properties" in {
+      val controller = inject[HomeController]
+      val home = controller.retrieveInfo()
+      println(home.toString())
+    }
+  }
+
 }

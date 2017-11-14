@@ -1,4 +1,6 @@
 .PHONY: all
 
-update-sources:
+update-enisme-conf:
+	rm .ensime
+	sbt ensimeConfig
 	sbt updateClassifiers

@@ -12,6 +12,7 @@ scalaVersion := "2.12.3"
 libraryDependencies += guice
 libraryDependencies += ws
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+libraryDependencies += "org.aksw.jena-sparql-api" % "jena-sparql-api-mapper" % "3.4.0-1"
 
 fork in Test := false
 
