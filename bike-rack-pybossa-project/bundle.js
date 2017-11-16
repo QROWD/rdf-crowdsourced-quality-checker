@@ -1,10 +1,12 @@
 
 pybossa.taskLoaded(function(task, deferred) {
   console.log(task)
-  console.log(deferred)
   if (!$.isEmptyObject(task)) {
     // $("#source").text(task.info.url);
-    $("#question").text(task.info.question);
+    var source = task.info[0]
+    var target = task.info[1]
+    $("#source").attr('src', source.thumbnail);
+    $("#target").attr('src', source.thumbnail);
     $("#loadingTask").hide();
     deferred.resolve(task);
   } // End if task empty

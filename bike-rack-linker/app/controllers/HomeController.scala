@@ -26,8 +26,11 @@ import play.api.mvc._
 import java.net.URL
 import javax.persistence.criteria.{ Expression, Predicate }
 
-import models.Task
-import models.Company
+import models.PybossaTask
+import models.BikeRack
+import com.amaxilatis.orion.OrionClient
+import models.LinkEvalRequest
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -50,22 +53,42 @@ class HomeController @Inject() (
   }
 
   def addTask() = Action(BodyParsers.parse.json).async { request ⇒
-    val tasks = request.body
-    val task: Task = Task(5, tasks)
-    val url: URL = new URL(config.get[String]("pybossa.server-url") + "/task")
-    val pybossaRequest: WSRequest =
-      ws.url(url.toString).addHttpHeaders("Content-Type" -> "application/json")
-        .addQueryStringParameters("api_key" -> config.get[String]("pybossa.api-key"))
-    val futureResponse: Future[WSResponse] = pybossaRequest.post(Json.toJson(task))
-    futureResponse.map({ i ⇒
-      Ok(i.body[JsValue])
-    })
+    request.body.validate[LinkEvalRequest] match {
+      case s: JsSuccess[LinkEvalRequest] ⇒ {
+        val linkEvalRequest: LinkEvalRequest = s.get
+
+        val sourceBikeRack = retrieveInfo(linkEvalRequest.source)
+        val targetBikeRack = retrieveInfo(linkEvalRequest.target)
+        val task: PybossaTask = PybossaTask(
+          config.get[Int]("pybossa.project.id"),
+          List(sourceBikeRack, targetBikeRack))
+
+        val url: URL = new URL(config.get[String]("pybossa.server-url") + "/task")
+        val pybossaRequest: WSRequest =
+          ws.url(url.toString).addHttpHeaders("Content-Type" -> "application/json")
+            .addQueryStringParameters("api_key" -> config.get[String]("pybossa.api-key"))
+        val futureResponse: Future[WSResponse] = pybossaRequest.post(Json.toJson(task))
+        futureResponse.map({ i ⇒
+          Ok(i.body[JsValue])
+        })
+      }
+      case e: JsError ⇒ {
+        Future { Ok(views.html.index()) }
+      }
+    }
+
   }
 
   // def testRetrieveInfo() = Action {
   // }
 
-  def retrieveInfo() = {
+  def subscribeOrionContextBroker() = {
+    val orionClient: OrionClient = new OrionClient(
+      config.get[String]("orion-client.server-url"),
+      config.get[String]("orion-client.token"))
+  }
+
+  def retrieveInfo(uri: String): BikeRack = {
 
     import java.util.List
     import javax.persistence.EntityManager
@@ -89,11 +112,12 @@ class HomeController @Inject() (
       .setNsPrefix("dbo", "http://dbpedia.org/ontology/")
       .setNsPrefix("dbr", "http://dbpedia.org/resource/")
       .setNsPrefix("nss", "http://example.org/nss/")
+      .setNsPrefix("lgdo", "http://linkedgeodata.org/ontology/")
     //
     // Classes which to register to the persistence unit
-    emFactory.addScanPackageName(classOf[Company].getPackage().getName())
+    emFactory.addScanPackageName(classOf[BikeRack].getPackage().getName())
 
-    val dataModel: Model = RDFDataMgr.loadModel("dbpedia-companies.ttl")
+    val dataModel: Model = RDFDataMgr.loadModel("bike-racks.nt")
 
     emFactory.setSparqlService(FluentSparqlService
       .from(dataModel)
@@ -105,29 +129,21 @@ class HomeController @Inject() (
 
     val em: EntityManager = emFactory.getObject()
 
-    import models.Company
-    import java.lang.Double
-    import org.aksw.jena_sparql_api.mapper.util.JpaUtils
-    import javax.persistence.criteria.Root
+    val bikeRack: BikeRack = em.find(classOf[BikeRack], uri)
 
-    val avg = JpaUtils.getSingleResult(em, classOf[Double], (cb: CriteriaBuilder, cq: CriteriaQuery[Double]) ⇒ {
-      def foo(cb: CriteriaBuilder, cq: CriteriaQuery[Double]) = {
-        val r2 = cq.from(classOf[Company])
-        cq.select(cb.avg(r2.get("numberOfLocations")))
-      }
-      foo(cb, cq)
-    }).doubleValue
-    System.out.println("Average number of locations: " + avg);
+    return bikeRack
 
-    val matches = JpaUtils
-      .getResultList(em, classOf[Company], (cb: CriteriaBuilder, cq: CriteriaQuery[Company]) ⇒ {
-        val r: Root[Company] = cq.from(classOf[Company])
-        cq.select(r)
-          .where(cb.greaterThanOrEqualTo(
-            r.get("foundingYear"), new java.lang.Integer(1955)).asInstanceOf[Expression[java.lang.Boolean]])
-        // .where(cb.greaterThanOrEqualTo(
-        //   r.get("numberOfLocations"), new java.lang.Integer(36000)).asInstanceOf[Predicate])
-      })
-    println(matches.toString)
+    // import java.lang.Double
+    // import org.aksw.jena_sparql_api.mapper.util.JpaUtils
+    // import javax.persistence.criteria.Root
+
+    // val avg = JpaUtils.getSingleResult(em, classOf[Double], (cb: CriteriaBuilder, cq: CriteriaQuery[Double]) ⇒ {
+    //   def foo(cb: CriteriaBuilder, cq: CriteriaQuery[Double]) = {
+    //     val r2 = cq.from(classOf[BikeRack])
+    //     cq.select(cb.avg(r2.get("numberOfLocations")))
+    //   }
+    //   foo(cb, cq)
+    // }).doubleValue
+    // System.out.println("Average number of locations: " + avg);
   }
 }

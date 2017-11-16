@@ -2,5 +2,5 @@
 
 update-enisme-conf:
 	rm .ensime
-	sbt ensimeConfig
-	sbt updateClassifiers
+	rm -r .ensime_cache
+	sbt reload ensimeConfig updateClassifiers
