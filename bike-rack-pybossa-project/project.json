@@ -2,5 +2,6 @@
   "name": "Bike Rack Linker",
   "short_name": "bike-rack-linker",
   "description": "Crowdsourcing bike-rack-linking in trento",
-  "question": "Are they the same?"
+  "question": "Are they the same?",
+  "webhook": "http://localhost:5000/project/bike-rak-inker/update"
 }

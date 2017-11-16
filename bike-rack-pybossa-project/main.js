@@ -1,9 +1,7 @@
-require('angular')
-console.log(angular)
 
 pybossa.taskLoaded(function(task, deferred) {
-  console.log(task)
-  console.log(deferred)
+  // console.log(task)
+  // console.log(deferred)
   if (!$.isEmptyObject(task)) {
     $("#source").text(task.info.url);
     $("#loadingTask").hide();

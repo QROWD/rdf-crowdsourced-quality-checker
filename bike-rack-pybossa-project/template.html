@@ -11,6 +11,19 @@
     .layersDiv label {
         color: white;
     }
+
+    .column {
+        float: left;
+        width: 50%;
+    }
+
+    /* Clear floats after the columns */
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
 </style>
 <div class="row">
     <!-- Success and Error Messages for the user -->
@@ -54,20 +67,29 @@
 </div>
 <!-- End of Row-->
 
-<div class="row">
-    <div class="skeleton col-md-12">
-        <div id="question">
-            <p id="source"></p>
-            <h1 id="target"></h1>
-            <button id="same" value='Yes' class="btn btn-default btn-answer">Same rack</button>
-            <button id="notSame" value='No' class="btn btn-default btn-answer">Not the same Rack</button>
-            <button id="dunno" value='Maybe' class="btn btn-default btn-answer">I don't know</button>
+<div class="skeleton col-md-12">
+        <p>Task: <span id="task-id" class="label label-warning">#</span></p>
 
-            <p>Task: <span id="task-id" class="label label-warning">#</span></p>
+    <div class="row">
+        <h1>Are those the same bike-racks?</h1>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <img id="source" src="http://3.bp.blogspot.com/_9-coSRlRBkE/TFn6JVwas0I/AAAAAAAAAOw/RaDRLpiT4yY/s320/bad+bike+rack.JPG">
+        </div>
+        <div class="column">
+            <img id='target' src="http://1.bp.blogspot.com/_9-coSRlRBkE/TFoC20vVqrI/AAAAAAAAAPA/O6mz9FUQQYA/s320/bad+bike+rack+2.JPG">
+        </div>
+        <!-- <p id="source"></p> -->
+        <!-- <h1 id="target"></h1> -->
+    </div>
+
+    <div class="row">
+        <div style="margin-top: 20px;" align="center">
+            <button id="same" value='Yes' class="btn btn-default btn-answer">Same</button>
+            <button id="notSame" value='No' class="btn btn-default btn-answer">Not the same</button>
+            <button id="dunno" value='Maybe' class="btn btn-default btn-answer">I don't know</button>
         </div>
     </div>
-</div>
-
-<div class="row skeleton">
-    <div id="disqus_thread" class="col-md-12"></div>
 </div>
