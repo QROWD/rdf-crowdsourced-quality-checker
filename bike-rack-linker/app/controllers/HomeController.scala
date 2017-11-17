@@ -110,6 +110,8 @@ class HomeController @Inject() (
     emFactory.getPrefixMapping()
       .setNsPrefix("schema", "http://schema.org/")
       .setNsPrefix("dbo", "http://dbpedia.org/ontology/")
+      .setNsPrefix("geo", "http://www.w3.org/2003/01/geo/")
+      .setNsPrefix("foaf", "http://xmlns.com/foaf/0.1/")
       .setNsPrefix("dbr", "http://dbpedia.org/resource/")
       .setNsPrefix("nss", "http://example.org/nss/")
       .setNsPrefix("lgdo", "http://linkedgeodata.org/ontology/")
@@ -117,7 +119,7 @@ class HomeController @Inject() (
     // Classes which to register to the persistence unit
     emFactory.addScanPackageName(classOf[BikeRack].getPackage().getName())
 
-    val dataModel: Model = RDFDataMgr.loadModel("bike-racks.nt")
+    val dataModel: Model = RDFDataMgr.loadModel("bike-racks-with-types.nt")
 
     emFactory.setSparqlService(FluentSparqlService
       .from(dataModel)
