@@ -96,8 +96,8 @@
 
         <div class="row" style="color: white; background-color: #546E7A">
             <h2 align="center">Picture</h2>
-        </div>
 
+        </div>
         <div class="row">
             <div class="column" style="border-right:4px solid #ffffff;">
                 <img id="source" class="displayed" align="center" height=300px src="">
@@ -117,37 +117,37 @@
                 <leaflet align="center" width=90% height="280px " markers="markers " bounds="bounds "></leaflet>
             </div>
         </div>
-        <div class="row" style="color: white; background-color: #546E7A">
-            <h2 align="center">Capacity</h2>
-        </div>
-        <div class="row">
-            <div class="column " align="center " style="border-right:4px solid #ffffff; ">
-                <h3 align="center "><span align="center " id="sourcecapacity ">   Bikes</span></h3>
-            </div>
-            <div class="column " align="center ">
-                <h3 align="center "><span id="targetcapacity ">   Bikes</span></h3>
-            </div>
-        </div>
-        <div class="row" style="color: white; background-color: #546E7A">
+               <div class="row" style="color: white; background-color: #546E7A">
             <h2 align="center">Type</h2>
         </div>
         <div class="row ">
             <div class="column " style="border-right:4px solid #ffffff; ">
-                <img id="sourceracktype " class="displayed " width=30% src=" ">
+                <img id="sourceracktype" class="displayed " width=30% src=" ">
             </div>
             <div class="column ">
                 <img id='targetracktype' class="displayed " width=30% src=" ">
             </div>
         </div>
+ <div class="row" style="color: white; background-color: #546E7A">
+            <h2 align="center">Capacity</h2>
+        </div>
+        <div class="row">
+            <div class="column " align="center " style="border-right:4px solid #ffffff; ">
+                <h3 align="center" id="sourcecapacity"></h3>
+            </div>
+            <div class="column " align="center ">
+                <h3 align="center" id="targetcapacity"></h3>
+            </div>
+        </div>
 
-        <div style="margin-top: 20px; " align="center ">
+        <div style="margin-bottom: 20px; " align="center">
             <button id="same " value='Yes' class="btn btn-default btn-answer ">The same</button>
             <button id="notSame " value='No' class="btn btn-default btn-answer ">Not the same</button>
             <button id="dunno " value='Maybe' class="btn btn-default btn-answer ">I don't know</button>
         </div>
 
-        <p>Task: <span id="task-id " class="label label-warning ">#</span></p>
     </div>
+</div>
 </div>
 
 <script>
@@ -194,8 +194,8 @@
             scope.$apply()
             $("#source ").attr('src', source.thumbnail);
             $("#target ").attr('src', target.thumbnail);
-            $("#sourcecapacity ").text(source.capacity);
-            $("#targetcapacity ").text(target.capacity);
+            $("#sourcecapacity ").text(source.capacity + " Bikes");
+            $("#targetcapacity ").text(target.capacity + " Bikes");
             $("#sourceracktype ").attr('src', source.bikeRackType.depiction);
             $("#targetracktype ").attr('src', target.bikeRackType.depiction);
             $("#loadingTask ").hide();

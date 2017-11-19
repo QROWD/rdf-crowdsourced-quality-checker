@@ -43,9 +43,9 @@
 <http://linkedgeodata.org/triplify/node1465193437> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://linkedgeodata.org/ontology/BicycleParking> .
 <http://linkedgeodata.org/triplify/node1465193437> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "4.54081078E1"^^<http://www.w3.org/2001/XMLSchema#double> .
 <http://linkedgeodata.org/triplify/node1465193437> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "1.18714984E1"^^<http://www.w3.org/2001/XMLSchema#double> .
-<http://linkedgeodata.org/triplify/node1465193437> <http://dbpedia.org/ontology/thumbnail> "https://assets.bikedocksolutions.com/media/catalog/product/cache/1/image/85e4522595efc69f496374d01ef2bf13/s/e/semi-vertical-bike-rack1g.jpg" .
+<http://linkedgeodata.org/triplify/node1461869763> <http://dbpedia.org/ontology/thumbnail> "http://www.landscapeforms.com/SiteCollectionImages/LFI%20Photo%20Gallery/Key%20Bike%20Rack/SantaCole_Key-001_main.jpg" .
+<http://linkedgeodata.org/triplify/node1465193437> <http://dbpedia.org/ontology/thumbnail> "https://cyclesafe.com/wp-content/uploads/2016/05/bike-u-rack-classic-stainless-steel.jpg" .
 <http://linkedgeodata.org/triplify/node1461869825> <http://dbpedia.org/ontology/thumbnail> "https://assets.bikedocksolutions.com/media/catalog/product/cache/1/image/85e4522595efc69f496374d01ef2bf13/s/e/semi-vertical-bike-rack1g.jpg" .
-<http://linkedgeodata.org/triplify/node1461869763> <http://dbpedia.org/ontology/thumbnail> "https://assets.bikedocksolutions.com/media/catalog/product/cache/1/image/85e4522595efc69f496374d01ef2bf13/s/e/semi-vertical-bike-rack1g.jpg" .
 
 
 <http://linkedgeodata.org/triplify/node1461869763> <http://linkedgeodata.org/ontology/capacity> "80"^^<http://www.w3.org/2001/XMLSchema#int> .
@@ -54,16 +54,16 @@
 
 <http://linkedgeodata.org/triplify/node1465193437> <http://linkedgeodata.org/ontology/bicycleParking> <http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> .
 <http://linkedgeodata.org/triplify/node1461869825> <http://linkedgeodata.org/ontology/bicycleParking> <http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> .
-<http://linkedgeodata.org/triplify/node1461869763> <http://linkedgeodata.org/ontology/bicycleParking> <http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> .
+<http://linkedgeodata.org/triplify/node1461869763> <http://linkedgeodata.org/ontology/bicycleParking> <http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> .
 
 
 <http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://linkedgeodata.org/ontology/BicycleParkingType> .
-<http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> <http://xmlns.com/foaf/0.1/depiction> "https://www.gametime.com/uploads/products/F7700_-_Loop_Bike_Rack_%282%29-6530-1478555594.jpg" .
-<http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> <http://www.w3.org/2000/01/rdf-schema#label> "wall_loops" .
+<http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> <http://xmlns.com/foaf/0.1/depiction> "http://localhost:9000/assets/images/image-1.png" .
+<http://linkedgeodata.org/ontology/BicycleParkingType#wallLoop> <http://www.w3.org/2000/01/rdf-schema#label> "A bent piece of metal against which you can lean your entire bicycle. Makes it possible to lock the frame and a wheel to it" .
 
 <http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://linkedgeodata.org/ontology/BicycleParkingType> .
-<http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> <http://xmlns.com/foaf/0.1/depiction> "https://www.saris.com/uploads/products/home/Mighty-Mite.jpg" .
-<http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> <http://www.w3.org/2000/01/rdf-schema#label> "verona_rack" .
+<http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> <http://xmlns.com/foaf/0.1/depiction> "http://localhost:9000/assets/images/image-2.png" .
+<http://linkedgeodata.org/ontology/BicycleParkingType#veronaRack> <http://www.w3.org/2000/01/rdf-schema#label> "A special kind of bollard designed for bike locking. Generally, the bike is locked to the central pole and arms of some sort prevent thieves from simply lifting the bike over the pole." .
 
 
 
