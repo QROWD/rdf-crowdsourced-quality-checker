@@ -66,4 +66,3 @@ Are on [Trello](https://trello.com/c/cJqG1a03/5-d71-data-quality-assessment-serv
 - [Forbidden characters - Fiware-Orion](https://fiware-orion.readthedocs.io/en/master/user/forbidden_characters/index.html)
 - [amaxilat/orion-client: Java Client for the Orion Context Broker Publish/Subscribe Context Broker GE](https://github.com/amaxilat/orion-client)
 - [fiware/orion - Docker Hub](https://hub.docker.com/r/fiware/orion/)
-
