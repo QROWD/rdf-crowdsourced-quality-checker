@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<style type="text/css">
+    .map_canvas label {
+        width: auto;
+        display: inline;
+    }
+
+    .olTileImage {
+        max-width: none !important;
+    }
+
+    .layersDiv label {
+        color: white;
+    }
+
+    .displayed {
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    .column {
+        float: left;
+        column-gap: 40px;
+        width: 50%;
+        -moz-column-rule: 4px solid #ff00ff;
+    }
+
+    /* Clear floats after the columns */
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        margin-bottom: 40px;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+<script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+
+<div ng-app="demoapp">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
+
+
+
+
+    <!-- <div class="row">-->
+    <!--     <1!-- Success and Error Messages for the user --1>-->
+    <!--     <div class="col-md-12" style="height:50px">-->
+    <!--         <1!-- Success alert box --1>-->
+    <!--         <div id="success" class="alert alert-success" style="display:none;">-->
+    <!--             <a class="close">×</a><strong>Well done!</strong> Your answer has been saved-->
+    <!--         </div>-->
+    <!--         <1!-- Task completed alert box --1>-->
+    <!--         <div id="taskcompleted" class="alert alert-info" style="display:none;">-->
+    <!--             <strong>The task has been completed!</strong> Thanks a lot!-->
+    <!--         </div>-->
+    <!--         <1!-- Task loading alert box --1>-->
+    <!--         <div id="loadingTask" class="alert alert-info">-->
+    <!--             <strong>Loading task...</strong>-->
+    <!--         </div>-->
+    <!--         <1!-- Task completed alert box --1>-->
+    <!--         <div id="finish" class="alert alert-success" style="display:none;">-->
+    <!--             <strong>Congratulations!</strong> You have participated in all available tasks!-->
+    <!--             <br/>-->
+    <!--             <div class="alert-actions">-->
+    <!--                 <a class="btn small" href="/">Go back</a>-->
+    <!--                 <a class="btn small" href="/app">or, Check other projects</a>-->
+    <!--             </div>-->
+    <!--         </div>-->
+    <!--         <1!-- Error alert box --1>-->
+    <!--         <div id="error" class="alert alert-danger" style="display:none;">-->
+    <!--             <a class="close">×</a>-->
+    <!--             <strong>Error!</strong> Something went wrong, please contact the site administrators-->
+    <!--         </div>-->
+    <!--         <1!-- Old Browser alert box --1>-->
+    <!--         <div id="oldBrowser" class="alert alert-info" style="display:none;">-->
+    <!--             <a class="close">×</a>-->
+    <!--             <p><strong>Sorry!</strong> Your web browser does not support the application.</p>-->
+    <!--             <div class="alert-actions">-->
+    <!--                 <a class="btn small" href="/app">Please, try with another project</a>-->
+    <!--             </div>-->
+    <!--         </div>-->
+    <!--     </div>-->
+    <!--     <1!-- End of span8 col-md-offset-2--1>-->
+    <!-- </div>-->
+    <!-- <1!-- End of Row--1>-->
+
+    <div style="background-color: #eaeaea">
+
+        <div class="row">
+            <h1 align="center">Are those the same bike-racks?</h1>
+        </div>
+
+        <div class="row" style="color: white; display: ''; background-color: #97ADB7">
+            <h2 align="center"><b>Picture</b></h2>
+
+        </div>
+        <div class="row">
+            <div class="column" style="border-right:4px solid #ffffff;">
+                <img id="source" class="displayed" align="center" height=300px src="">
+
+            </div>
+            <div class="column">
+                <img id='target' class="displayed" align="center" height=300px src="">
+            </div>
+        </div>
+        <div class="row" style="color: white; display: ''; background-color: #97ADB7">
+            <h2 align="center"><b>Location</b></h2>
+        </div>
+        <div class="row">
+
+            <!-- <leaflet width="640px" height="480px"></leaflet> -->
+            <div align="center" ng-controller="MarkerController">
+                <leaflet align="center" width=90% height="280px " markers="markers " bounds="bounds "></leaflet>
+            </div>
+        </div>
+               <div class="row" style="color: white; display: ''; background-color: #97ADB7">
+                   <h2 align="center"><b>Type</b></h2>
+        </div>
+        <div class="row ">
+            <div class="column " style="border-right:4px solid #ffffff; ">
+                <img id="sourceracktype" class="displayed " width=30% src=" ">
+            </div>
+            <div class="column ">
+                <img id='targetracktype' class="displayed " width=30% src=" ">
+            </div>
+        </div>
+ <div class="row" style="color: white; display: ''; background-color: #97ADB7">
+            <h2 align="center"><b>Capacity</b></h2>
+        </div>
+        <div class="row">
+            <div class="column " align="center " style="border-right:4px solid #ffffff; ">
+                <h3 align="center" id="sourcecapacity"></h3>
+            </div>
+            <div class="column " align="center ">
+                <h3 align="center" id="targetcapacity"></h3>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 20px; " align="center">
+            <button id="same " value='Yes' class="btn btn-default btn-answer ">The same</button>
+            <button id="notSame " value='No' class="btn btn-default btn-answer ">Not the same</button>
+            <button id="dunno " value='Maybe' class="btn btn-default btn-answer ">I don't know</button>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script>
+    var app = angular.module("demoapp", ['leaflet-directive']);
+
+    app.controller("MarkerController", ['$scope', 'leafletBoundsHelpers', function($scope, leafletBoundsHelpers) {
+        angular.extend($scope, {
+            leafletBoundsHelpers,
+            bounds: {},
+            center: {},
+            markers: {},
+            defaults: {
+                scrollWheelZoom: false
+            }
+        });
+    }]);
+
+    pybossa.taskLoaded(function(task, deferred) {
+        if (!$.isEmptyObject(task)) {
+            var scope = angular.element('[ng-controller=MarkerController]').scope()
+            var source = task.info[0]
+            var target = task.info[1]
+            var bounds = scope.leafletBoundsHelpers.createBoundsFromArray([
+                [target.lat, target.long],
+                [source.lat, source.long]
+            ]);
+            scope.addMarkers = function() {
+                angular.extend(scope, {
+                    bounds: bounds,
+                    markers: {
+                        m1: {
+                            lat: source.lat,
+                            lng: source.long,
+                            message: "A "
+                        },
+                        m2: {
+                            lat: target.lat,
+                            lng: target.long,
+                            message: "B "
+                        }
+                    }
+                });
+            }();
+            scope.$apply()
+            $("#source ").attr('src', source.thumbnail);
+            $("#target ").attr('src', target.thumbnail);
+            $("#sourcecapacity ").text(source.capacity + " Bikes");
+            $("#targetcapacity ").text(target.capacity + " Bikes");
+            $("#sourceracktype ").attr('src', source.bikeRackType.depiction);
+            $("#targetracktype ").attr('src', target.bikeRackType.depiction);
+            $("#loadingTask ").hide();
+            deferred.resolve(task);
+        } // End if task empty
+        else {
+            deferred.resolve(task);
+        }
+    });
+
+    pybossa.presentTask(function(task, deferred) {
+        if (!$.isEmptyObject(task)) {
+            if (task.state == 'completed') {
+                $('#controls').hide();
+                $('#answer').hide();
+                $('#disqus_thread').hide();
+                $('#taskcompleted').show();
+            }
+
+            $("#task-id ").text(task.id);
+            $("#loadingTask ").hide();
+
+            $('.btn-answer').off('click').on('click', function(evt) {
+                console.log(evt)
+                var answer = $(evt.target).attr("value ");
+                if (typeof answer != 'undefined') {
+                    console.log(answer);
+                    pybossa.saveTask(task.id, answer).done(function() {
+                        deferred.resolve();
+                    });
+                } else {
+                    $("#error ").show();
+                }
+            });
+
+        } else {
+            $(".skeleton ").hide();
+            $("#finish ").fadeIn();
+        }
+    });
+
+    pybossa.run('bike-rack-linker');
+</script>
