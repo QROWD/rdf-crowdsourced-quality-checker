@@ -1,3 +1,1 @@
-# rdf-crowdsourced-quality-checker
-
-Project definition for the Pybossa-Project is inside the `bike-rack-pybossa-project` folder
+see [wiki](https://github.com/QROWD/rdf-crowdsourced-quality-checker/wiki)
