@@ -52,6 +52,11 @@ class HomeController @Inject() (
     Ok(views.html.index())
   }
 
+  def resolveTask() = Action { implicit request: Request[AnyContent] ⇒
+    println(request.body)
+    Ok(views.html.index())
+  }
+
   def addTask() = Action(BodyParsers.parse.json).async { request ⇒
     request.body.validate[LinkEvalRequest] match {
       case s: JsSuccess[LinkEvalRequest] ⇒ {

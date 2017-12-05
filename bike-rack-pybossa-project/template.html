@@ -220,20 +220,20 @@
 
             $('.btn-answer').off('click').on('click', function(evt) {
                 console.log(evt)
-                var answer = $(evt.target).attr("value ");
+                var answer = $(evt.target).attr("value");
                 if (typeof answer != 'undefined') {
                     console.log(answer);
                     pybossa.saveTask(task.id, answer).done(function() {
                         deferred.resolve();
                     });
                 } else {
-                    $("#error ").show();
+                    $("#error").show();
                 }
             });
 
         } else {
-            $(".skeleton ").hide();
-            $("#finish ").fadeIn();
+            $(".skeleton").hide();
+            $("#finish").fadeIn();
         }
     });
 

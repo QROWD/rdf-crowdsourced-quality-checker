@@ -22,7 +22,6 @@ import akka.util.ByteString
 import javax.inject._
 import play.api._
 import play.api.mvc._
-import models.Task
 
 /**
  * Add your spec here.
@@ -69,10 +68,10 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
       val request = FakeRequest(POST, "/")
         .withJsonBody(info)
 
-      val home = route(app, request).get
+      val pybossaResponse = route(app, request).get
 
-
-      status(home) mustBe OK
+      println(pybossaResponse)
+      status(pybossaResponse) mustBe OK
       // {
       //   "flash": "Tasks imported",
       //   "next": "/project/<short_name>/tasks/",
