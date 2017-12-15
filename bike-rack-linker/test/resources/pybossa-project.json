@@ -1,0 +1,6 @@
+{
+  "description": "test",
+  "short_name": "test",
+  "name": "test",
+  "webhook": "http://10.0.2.2:9000/resolveTask"
+}

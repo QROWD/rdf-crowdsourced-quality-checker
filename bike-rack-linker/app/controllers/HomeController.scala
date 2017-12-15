@@ -30,6 +30,7 @@ import models.PybossaTask
 import models.BikeRack
 import com.amaxilatis.orion.OrionClient
 import models.LinkEvalRequest
+import models.PybossaProject
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -41,47 +42,75 @@ class HomeController @Inject() (
     ws:     WSClient,
     config: Configuration) extends AbstractController(cc) {
 
-  /**
-   * Create an Action to render an HTML page.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
   def index() = Action { implicit request: Request[AnyContent] ⇒
     Ok(views.html.index())
   }
 
-  def resolveTask() = Action { implicit request: Request[AnyContent] ⇒
-    println(request.body)
-    Ok(views.html.index())
+  def pybossaRequest(endpoint: String): WSRequest = {
+    val url: URL = new URL(config.get[String]("pybossa.server-url") + endpoint)
+    ws.url(url.toString)
+      .addHttpHeaders("Content-Type" -> "application/json")
+      .addQueryStringParameters("api_key" -> config.get[String]("pybossa.api-key"))
   }
 
-  def addTask() = Action(BodyParsers.parse.json).async { request ⇒
-    request.body.validate[LinkEvalRequest] match {
-      case s: JsSuccess[LinkEvalRequest] ⇒ {
-        val linkEvalRequest: LinkEvalRequest = s.get
-
-        val sourceBikeRack = retrieveInfo(linkEvalRequest.source)
-        val targetBikeRack = retrieveInfo(linkEvalRequest.target)
-        val task: PybossaTask = PybossaTask(
-          config.get[Int]("pybossa.project.id"),
-          List(sourceBikeRack, targetBikeRack))
-
-        val url: URL = new URL(config.get[String]("pybossa.server-url") + "/task")
-        val pybossaRequest: WSRequest =
-          ws.url(url.toString).addHttpHeaders("Content-Type" -> "application/json")
-            .addQueryStringParameters("api_key" -> config.get[String]("pybossa.api-key"))
-        val futureResponse: Future[WSResponse] = pybossaRequest.post(Json.toJson(task))
-        futureResponse.map({ i ⇒
-          Ok(i.body[JsValue])
-        })
-      }
-      case e: JsError ⇒ {
-        Future { Ok(views.html.index()) }
+  def createProject() = Action(parse.json).async { request: Request[JsValue] ⇒
+    pybossaRequest("project").post(request.body).map { response ⇒
+      response.status match {
+        case 200 ⇒ Ok(response.body)
+        case _   ⇒ BadRequest(response.body)
       }
     }
+  }
 
+  def getProjectId(shortName: String): Future[Option[Int]] = {
+    pybossaRequest("project").addQueryStringParameters("short_name" -> shortName).get() map {
+      response ⇒ (response.json \ 0 \ "id").asOpt[Int]
+    }
+  }
+
+  def deleteProject(shortName: String): Action[AnyContent] = Action.async { request ⇒
+    getProjectId(shortName).flatMap {
+      case Some(id) ⇒ deleteProject(id)
+      case None     ⇒ Future.successful(NoContent)
+    }
+  }
+
+  def deleteProject(id: Int): Future[Result] = pybossaRequest("project/" + id).delete() map {
+    _.status match {
+      case 204 ⇒ NoContent
+      case _   ⇒ BadRequest
+    }
+  }
+
+  def resolveTask() = Action(parse.json).async { request: Request[JsValue] ⇒
+    (request.body \ "task_id").asOpt[Int] match {
+      case Some(task_id) ⇒
+        pybossaRequest("taskrun")
+          .addQueryStringParameters("task_id" -> task_id.toString)
+          .get()
+          .map(response ⇒ Ok(response.json))
+      case None ⇒ Future.successful(NoContent)
+    }
+  }
+
+  def resolveAnswers(answers: List[JsValue]) = {}
+
+  def addTask(shortName: String) = Action(parse.json).async { request ⇒
+    getProjectId(shortName).flatMap {
+      case Some(id) ⇒ request.body.validate[LinkEvalRequest] match {
+        case s: JsSuccess[LinkEvalRequest] ⇒ {
+          val linkEvalRequest: LinkEvalRequest = s.get
+          val sourceBikeRack = retrieveInfo(linkEvalRequest.source)
+          val targetBikeRack = retrieveInfo(linkEvalRequest.target)
+          val task: PybossaTask = PybossaTask(id, List(sourceBikeRack, targetBikeRack))
+          pybossaRequest("task").post(Json.toJson(task)) map {
+            response ⇒ Ok(response.json)
+          }
+        }
+        case e: JsError ⇒ Future { BadRequest(JsError.toJson(e)) }
+      }
+      case None ⇒ Future { NotFound }
+    }
   }
 
   // def testRetrieveInfo() = Action {
@@ -140,17 +169,5 @@ class HomeController @Inject() (
 
     return bikeRack
 
-    // import java.lang.Double
-    // import org.aksw.jena_sparql_api.mapper.util.JpaUtils
-    // import javax.persistence.criteria.Root
-
-    // val avg = JpaUtils.getSingleResult(em, classOf[Double], (cb: CriteriaBuilder, cq: CriteriaQuery[Double]) ⇒ {
-    //   def foo(cb: CriteriaBuilder, cq: CriteriaQuery[Double]) = {
-    //     val r2 = cq.from(classOf[BikeRack])
-    //     cq.select(cb.avg(r2.get("numberOfLocations")))
-    //   }
-    //   foo(cb, cq)
-    // }).doubleValue
-    // System.out.println("Average number of locations: " + avg);
   }
 }
