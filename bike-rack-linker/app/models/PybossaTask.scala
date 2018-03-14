@@ -7,7 +7,7 @@ case class PybossaTask(
     info:        List[BikeRack],
     calibration: Int            = 0,
     priority_0:  Float          = 0,
-    n_answers:   Int            = 30,
+    n_answers:   Int            = 1,
     quorum:      Int            = 0)
 
 object PybossaTask {
