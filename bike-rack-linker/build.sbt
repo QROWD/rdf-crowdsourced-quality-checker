@@ -1,7 +1,7 @@
 name := """bike-rack-linker"""
 organization := "QROWD"
 
-version := "0.0.1"
+version := "0.0.2"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
