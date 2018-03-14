@@ -32,32 +32,34 @@ import play.api.mvc._
 
 class HomeControllerSpec extends PlaySpec with GuiceOneServerPerSuite with Injecting {
 
-//   "DELETE /project/{id}" should {
+  "DELETE /project/{id}" should {
 
-//     "delete the project" in {
-//       val request = FakeRequest(DELETE, "/project/test")
-//       val pybossaResponse = route(app, request).get
-//       status(pybossaResponse) mustBe 204
-//     }
-//   }
+    "delete the project" in {
 
-//   "POST /project" should {
+      val project = Json.parse(getClass.getResourceAsStream("/pybossa-test-project/pybossa-project.json"))
+      val projectShortName = (project \ "short_name").as[String]
+      val request = FakeRequest(DELETE, "/project/" + projectShortName)
+      val pybossaResponse = route(app, request).get
+      status(pybossaResponse) mustBe 204
+    }
+  }
 
-//     "create a project" in {
+  "POST /project" should {
 
-//       val project = Json.parse(getClass.getResourceAsStream("/pybossa-project.json")).as[JsObject]
-//       val template = Source.fromResource("template.html").mkString
-//       val projectJson = project + ("info" -> Json.obj("task_presenter" -> template))
-//       val request = FakeRequest(POST, "/project").withJsonBody(projectJson)
-//       val pybossaResponse = route(app, request).get
-//       status(pybossaResponse) mustBe OK
-//     }
-//   }
+    "create a project" in {
+      val project = Json.parse(getClass.getResourceAsStream("/pybossa-test-project/pybossa-project.json")).as[JsObject]
+      val template = Source.fromResource("pybossa-test-project/template.html").mkString
+      val projectJson = project + ("info" -> Json.obj("task_presenter" -> template))
+      val request = FakeRequest(POST, "/project").withJsonBody(projectJson)
+      val pybossaResponse = route(app, request).get
+      status(pybossaResponse) mustBe OK
+    }
+  }
 
-  "HomeController POST" should {
+  "POST /project/:shortName/task" should {
 
     "accept a task" in {
-      val project = Json.parse(getClass.getResourceAsStream("/pybossa-project.json"))
+      val project = Json.parse(getClass.getResourceAsStream("/pybossa-test-project/pybossa-project.json"))
       val projectShortName = (project \ "short_name").as[String]
       val info = Json.parse(getClass.getResourceAsStream("/unique-id-service-output.json"))
       val request = FakeRequest(POST, "/project/" + projectShortName + "/task")
@@ -72,6 +74,24 @@ class HomeControllerSpec extends PlaySpec with GuiceOneServerPerSuite with Injec
       status(pybossaResponse2) mustBe OK
     }
   }
+
+
+
+
+
+
+
+  // "POST /resolveTask" should {
+
+  //   "accept a task" in {
+  //     val payload = Json.parse(getClass.getResourceAsStream("/pybossa-webhook.json"))
+  //     val request = FakeRequest(POST, "/resolveTask").withJsonBody(payload)
+
+  //     val pybossaResponse = route(app, request).get
+
+  //     status(pybossaResponse) mustBe OK
+  //   }
+  // }
 }
 
 // class ExampleSpec extends PlaySpec with GuiceOneServerPerSuite with OneBrowserPerSuite with FirefoxFactory {

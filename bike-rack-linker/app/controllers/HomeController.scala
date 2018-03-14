@@ -26,11 +26,8 @@ import play.api.mvc._
 import java.net.URL
 import javax.persistence.criteria.{ Expression, Predicate }
 
-import models.PybossaTask
-import models.BikeRack
+import models._
 import com.amaxilatis.orion.OrionClient
-import models.LinkEvalRequest
-import models.PybossaProject
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -85,15 +82,67 @@ class HomeController @Inject() (
   def resolveTask() = Action(parse.json).async { request: Request[JsValue] ⇒
     (request.body \ "task_id").asOpt[Int] match {
       case Some(task_id) ⇒
-        pybossaRequest("taskrun")
-          .addQueryStringParameters("task_id" -> task_id.toString)
-          .get()
-          .map(response ⇒ Ok(response.json))
+        pybossaRequest("taskrun").addQueryStringParameters("task_id" -> task_id.toString).get() flatMap { response ⇒
+          response.json.validate[List[TaskRun]] match {
+            case s: JsSuccess[List[TaskRun]] ⇒
+              val bla = resolveAnswers(s.get)
+              val blablub = publishAnswers(s.get)
+              println(bla)
+              Future.successful(NoContent)
+            case e: JsError ⇒ Future {
+              BadRequest(JsError.toJson(e))
+            }
+          }
+        }
       case None ⇒ Future.successful(NoContent)
     }
   }
 
-  def resolveAnswers(answers: List[JsValue]) = {}
+  def resolveAnswers(taskRuns: List[TaskRun]): Map[String, Int] = {
+    taskRuns.groupBy(_.answer).mapValues(_.size)
+  }
+
+  def publishAnswers(taskRuns: List[TaskRun]) = {
+    import java.util.List
+    import javax.persistence.EntityManager
+    import javax.persistence.criteria.Root
+
+    import org.aksw.jena_sparql_api.mapper.jpa.core.SparqlEntityManagerFactory
+    import org.aksw.jena_sparql_api.mapper.util.JpaUtils
+    import org.aksw.jena_sparql_api.stmt.SparqlQueryParserImpl
+    import org.aksw.jena_sparql_api.update.FluentSparqlService
+    import org.apache.jena.rdf.model.Model
+    import org.apache.jena.rdf.model.ModelFactory
+    import org.apache.jena.riot.RDFDataMgr
+    import org.apache.jena.riot.RDFFormat
+    import javax.persistence.criteria.CriteriaBuilder;
+    import javax.persistence.criteria.CriteriaQuery;
+
+    val emFactory: SparqlEntityManagerFactory = new SparqlEntityManagerFactory()
+
+    emFactory.getPrefixMapping()
+      .setNsPrefix("schema", "http://schema.org/")
+      .setNsPrefix("dbo", "http://dbpedia.org/ontology/")
+      .setNsPrefix("geo", "http://www.w3.org/2003/01/geo/")
+      .setNsPrefix("foaf", "http://xmlns.com/foaf/0.1/")
+      .setNsPrefix("dbr", "http://dbpedia.org/resource/")
+      .setNsPrefix("nss", "http://example.org/nss/")
+      .setNsPrefix("lgdo", "http://linkedgeodata.org/ontology/")
+    //
+    // Classes which to register to the persistence unit
+    emFactory.addScanPackageName(classOf[TaskRun].getPackage().getName())
+
+
+    emFactory.setSparqlService(FluentSparqlService
+      .http(config.get[String]("sparql-endpoint"))
+      .config().configQuery()
+      .withParser(SparqlQueryParserImpl.create())
+      .withPagination(50000)
+      .end().end().create())
+
+    val em: EntityManager = emFactory.getObject()
+    taskRuns.map(taskRun => em.persist(taskRun))
+  }
 
   def addTask(shortName: String) = Action(parse.json).async { request ⇒
     getProjectId(shortName).flatMap {
