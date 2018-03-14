@@ -1,0 +1,26 @@
+{
+  "project_id": 2,
+  "info": [{
+    "bikeRackType": {
+      "label": "A special kind of bollard designed for bike locking. Generally, the bike is locked to the central pole and arms of some sort prevent thieves from simply lifting the bike over the pole.",
+      "depiction": "http://localhost:9000/assets/images/image-2.png"
+    },
+    "lat": 45.4069416,
+    "long": 11.874385700000001,
+    "capacity": 80,
+    "thumbnail": "http://www.landscapeforms.com/SiteCollectionImages/LFI%20Photo%20Gallery/Key%20Bike%20Rack/SantaCole_Key-001_main.jpg"
+  }, {
+    "bikeRackType": {
+      "label": "A bent piece of metal against which you can lean your entire bicycle. Makes it possible to lock the frame and a wheel to it",
+      "depiction": "http://localhost:9000/assets/images/image-1.png"
+    },
+    "lat": 45.4081078,
+    "long": 11.8714984,
+    "capacity": 30,
+    "thumbnail": "https://cyclesafe.com/wp-content/uploads/2016/05/bike-u-rack-classic-stainless-steel.jpg"
+  }],
+  "calibration": 0,
+  "priority_0": 0,
+  "n_answers": 30,
+  "quorum": 0
+}

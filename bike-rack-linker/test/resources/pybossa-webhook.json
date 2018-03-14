@@ -1,0 +1,8 @@
+{
+  "task_id": 94,
+  "fired_at": "2017-12-15 11:20:39",
+  "project_short_name": "test",
+  "project_id": 134,
+  "result_id": 15,
+  "event": "task_completed"
+}

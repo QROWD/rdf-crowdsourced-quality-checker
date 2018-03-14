@@ -1,7 +1,7 @@
 name := """bike-rack-linker"""
 organization := "QROWD"
 
-version := "0.0.1"
+version := "0.0.2"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -14,6 +14,7 @@ libraryDependencies += guice
 libraryDependencies += ws
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
 libraryDependencies += "org.aksw.jena-sparql-api" % "jena-sparql-api-mapper" % "3.4.0-1"
+libraryDependencies += "com.typesafe.play" %% "play-json-joda" % "2.6.0-RC1"
 /* libraryDependencies += "com.amaxilatis" % "orion-client" % "1.0-SNAPSHOT" */
 
 fork in Test := false
